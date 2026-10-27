@@ -1,1 +1,2451 @@
+<!DOCTYPE html>
+<html lang="en">
 
+<head>
+
+<meta charset="UTF-8">
+
+<meta
+name="viewport"
+content="width=device-width, initial-scale=1.0">
+
+<title>StudentOS v3.0</title>
+
+<style>
+
+:root{
+
+--bg:#0b1220;
+--panel:#111827;
+--panel2:#1e293b;
+--accent:#3b82f6;
+--text:#ffffff;
+--border:#334155;
+
+}
+
+*{
+
+margin:0;
+padding:0;
+box-sizing:border-box;
+
+}
+
+body{
+
+background:var(--bg);
+color:var(--text);
+font-family:"Segoe UI",sans-serif;
+overflow:hidden;
+
+}
+
+.topbar{
+
+height:60px;
+background:var(--panel);
+
+display:flex;
+align-items:center;
+justify-content:space-between;
+
+padding-left:20px;
+padding-right:20px;
+
+border-bottom:1px solid var(--border);
+
+}
+
+.logo-section{
+
+display:flex;
+align-items:center;
+gap:12px;
+
+}
+
+.logo{
+
+font-size:24px;
+
+}
+
+.title{
+
+font-weight:bold;
+font-size:20px;
+
+}
+
+.clock{
+
+font-size:14px;
+
+}
+
+.layout{
+
+display:flex;
+height:calc(100vh - 60px);
+
+}
+
+.sidebar{
+
+width:260px;
+background:var(--panel);
+
+border-right:1px solid var(--border);
+
+padding:15px;
+
+overflow-y:auto;
+
+}
+
+.main{
+
+flex:1;
+overflow:auto;
+
+padding:25px;
+
+}
+
+.nav-header{
+
+font-size:12px;
+
+opacity:0.7;
+
+margin-top:15px;
+margin-bottom:10px;
+
+text-transform:uppercase;
+
+}
+
+.nav-btn{
+
+width:100%;
+
+background:var(--panel2);
+
+border:none;
+
+color:white;
+
+padding:12px;
+
+border-radius:12px;
+
+cursor:pointer;
+
+margin-bottom:8px;
+
+text-align:left;
+
+}
+
+.nav-btn:hover{
+
+background:#334155;
+
+}
+
+.page{
+
+display:none;
+
+}
+
+.page.active{
+
+display:block;
+
+}
+
+.hero{
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+padding:25px;
+
+border-radius:24px;
+
+margin-bottom:20px;
+
+}
+
+.hero h1{
+
+margin-bottom:10px;
+
+}
+
+.widget-grid{
+
+display:grid;
+
+grid-template-columns:
+repeat(auto-fit,minmax(250px,1fr));
+
+gap:20px;
+
+}
+
+.card{
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+border-radius:20px;
+
+padding:20px;
+
+}
+
+.card h3{
+
+margin-bottom:10px;
+
+}
+
+.big-number{
+
+font-size:38px;
+
+font-weight:bold;
+
+}
+
+.taskbar{
+
+position:fixed;
+
+left:260px;
+
+right:0;
+
+bottom:0;
+
+height:55px;
+
+background:var(--panel);
+
+border-top:1px solid var(--border);
+
+display:flex;
+
+align-items:center;
+
+padding-left:15px;
+
+gap:10px;
+
+}
+
+.taskbar button{
+
+border:none;
+
+background:var(--panel2);
+
+color:white;
+
+border-radius:10px;
+
+padding:10px 14px;
+
+cursor:pointer;
+
+}
+
+.start-menu{
+
+position:fixed;
+
+bottom:70px;
+
+left:280px;
+
+width:350px;
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+border-radius:20px;
+
+padding:20px;
+
+display:none;
+
+}
+
+.start-menu.show{
+
+display:block;
+
+}
+
+textarea{
+
+width:100%;
+
+height:400px;
+
+resize:none;
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+color:white;
+
+padding:15px;
+
+border-radius:15px;
+
+}
+
+input{
+
+padding:12px;
+
+border-radius:10px;
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+color:white;
+
+}
+
+.action{
+
+padding:12px 16px;
+
+border:none;
+
+cursor:pointer;
+
+border-radius:10px;
+
+background:var(--accent);
+
+color:white;
+
+}
+
+.assignment{
+
+margin-top:10px;
+
+background:var(--panel);
+
+padding:12px;
+
+border-radius:12px;
+
+border:1px solid var(--border);
+
+}
+
+.timer-display{
+
+font-size:80px;
+
+font-weight:bold;
+
+margin:20px 0;
+
+}
+
+.calendar{
+
+display:grid;
+
+grid-template-columns:
+repeat(7,1fr);
+
+gap:10px;
+
+margin-top:20px;
+
+}
+
+.day{
+
+height:90px;
+
+background:var(--panel);
+
+border:1px solid var(--border);
+
+border-radius:12px;
+
+padding:8px;
+
+}
+
+</style>
+
+</head>
+
+<body>
+
+<div class="topbar">
+
+<div class="logo-section">
+
+<div class="logo">
+🪟
+</div>
+
+<div class="title">
+StudentOS v3.0
+</div>
+
+</div>
+
+<div
+class="clock"
+id="clock">
+
+Loading...
+
+</div>
+
+</div>
+
+<div class="layout">
+
+<div class="sidebar">
+
+<div class="nav-header">
+Main
+</div>
+
+<button
+class="nav-btn"
+onclick="showPage('dashboard')">
+🏠 Dashboard
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('assignments')">
+✅ Assignments
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('notes')">
+📝 Notes
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('todo')">
+📋 To-Do
+</button>
+
+<div class="nav-header">
+Study
+</div>
+
+<button
+class="nav-btn"
+onclick="showPage('calculator')">
+🧮 Calculator
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('gpa')">
+🎓 GPA Calculator
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('flashcards')">
+🗂 Flashcards
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('focus')">
+⏱ Focus Timer
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('stopwatch')">
+⏲ Stopwatch
+</button>
+
+<div class="nav-header">
+Tools
+</div>
+
+<button
+class="nav-btn"
+onclick="showPage('calendar')">
+📅 Calendar
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('school')">
+🏫 School Launcher
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('links')">
+🔗 Quick Links
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('music')">
+🎵 Music
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('ai')">
+🤖 AI Assistant
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('system')">
+💻 System Info
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('settings')">
+⚙ Settings
+</button>
+
+</div>
+
+<div class="main">
+
+<div
+id="dashboard"
+class="page active">
+
+<div class="hero">
+
+<h1>
+Welcome to StudentOS
+</h1>
+
+<p>
+
+Your complete study workspace.
+
+Assignments, notes, GPA tracking,
+timers, calculators, flashcards,
+AI tools, music, and more.
+
+</p>
+
+</div>
+
+<div class="widget-grid">
+
+<div class="card">
+
+<h3>
+🔥 Study Streak
+</h3>
+
+<div
+class="big-number"
+id="streakCounter">
+
+1
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>
+✅ Assignments
+</h3>
+
+<div
+class="big-number"
+id="assignmentCounter">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>
+⭐ XP
+</h3>
+
+<div
+class="big-number"
+id="xp">
+
+0
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>
+🏆 Level
+</h3>
+
+<div
+class="big-number"
+id="level">
+
+1
+
+</div>
+
+</div>
+
+<div class="card">
+
+<h3>
+💡 Daily Quote
+</h3>
+
+<p id="quote">
+
+Loading...
+
+</p>
+
+</div>
+
+<div class="card">
+
+<h3>
+📖 Notes Status
+</h3>
+
+<p>
+
+Auto Save Enabled
+
+</p>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="assignments"
+class="page">
+
+<h1>Assignment Tracker</h1>
+
+<br>
+
+<input
+id="assignmentInput"
+placeholder="Enter assignment">
+
+<button
+class="action"
+onclick="addAssignment()">
+
+Add Assignment
+
+</button>
+
+<br><br>
+
+<div
+id="assignmentList">
+
+</div>
+
+</div>
+
+<div
+id="notes"
+class="page">
+
+<h1>Notes</h1>
+
+<br>
+
+<textarea
+
+id="notesBox"
+
+placeholder="Type notes here...">
+
+</textarea>
+
+</div>
+
+<div
+id="todo"
+class="page">
+
+<h1>To-Do List</h1>
+
+<br>
+
+<input
+id="todoInput"
+placeholder="Enter task">
+
+<button
+class="action"
+onclick="addTodo()">
+
+Add Task
+
+</button>
+
+<br><br>
+
+<div
+id="todoList">
+
+</div>
+
+</div>
+
+<div
+id="calculator"
+class="page">
+
+<h1>Calculator</h1>
+
+<br>
+
+<input
+id="calcInput"
+placeholder="Example: 25*4+6">
+
+<button
+class="action"
+onclick="calculate()">
+
+Calculate
+
+</button>
+
+<br><br>
+
+<h2
+id="calcResult">
+
+Answer appears here
+
+</h2>
+
+</div>
+
+<div
+id="gpa"
+class="page">
+
+<h1>GPA Calculator</h1>
+
+<br>
+
+<input
+id="grade1"
+placeholder="Class 1 Grade">
+
+<br><br>
+
+<input
+id="grade2"
+placeholder="Class 2 Grade">
+
+<br><br>
+
+<input
+id="grade3"
+placeholder="Class 3 Grade">
+
+<br><br>
+
+<input
+id="grade4"
+placeholder="Class 4 Grade">
+
+<br><br>
+
+<input
+id="grade5"
+placeholder="Class 5 Grade">
+
+<br><br>
+
+<input
+id="grade6"
+placeholder="Class 6 Grade">
+
+<br><br>
+
+<input
+id="grade7"
+placeholder="Class 7 Grade">
+
+<br><br>
+
+<input
+id="grade8"
+placeholder="Class 8 Grade">
+
+<br><br>
+
+<button
+class="action"
+onclick="calcGPA()">
+
+Calculate GPA
+
+</button>
+
+<br><br>
+
+<h2>
+
+Average Grade:
+
+<span
+id="gpaResult">
+
+0
+
+</span>
+
+</h2>
+
+</div>
+
+<div
+id="flashcards"
+class="page">
+
+<h1>Flashcards</h1>
+
+<br>
+
+<div class="card">
+
+<h2
+id="flashQuestion">
+
+What is 7 × 8?
+
+</h2>
+
+<br>
+
+<button
+class="action"
+onclick="showAnswer()">
+
+Show Answer
+
+</button>
+
+<br><br>
+
+<div
+id="flashAnswer">
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="focus"
+class="page">
+
+<h1>Focus Timer</h1>
+
+<br>
+
+<div
+class="timer-display"
+id="timer">
+
+25:00
+
+</div>
+
+<button
+class="action"
+onclick="startTimer()">
+
+Start
+
+</button>
+
+<button
+class="action"
+onclick="resetTimer()">
+
+Reset
+
+</button>
+
+</div>
+
+<div
+id="stopwatch"
+class="page">
+
+<h1>Stopwatch</h1>
+
+<br>
+
+<div
+class="timer-display"
+id="stopwatchDisplay">
+
+00:00
+
+</div>
+
+<button
+class="action"
+onclick="startStopwatch()">
+
+Start
+
+</button>
+
+<button
+class="action"
+onclick="resetStopwatch()">
+
+Reset
+
+</button>
+
+</div>
+
+<div
+id="calendar"
+class="page">
+
+<h1>Calendar</h1>
+
+<br>
+
+<div class="calendar">
+
+<div class="day">1</div>
+<div class="day">2</div>
+<div class="day">3</div>
+<div class="day">4</div>
+<div class="day">5</div>
+<div class="day">6</div>
+<div class="day">7</div>
+
+<div class="day">8</div>
+<div class="day">9</div>
+<div class="day">10</div>
+<div class="day">11</div>
+<div class="day">12</div>
+<div class="day">13</div>
+<div class="day">14</div>
+
+<div class="day">15</div>
+<div class="day">16</div>
+<div class="day">17</div>
+<div class="day">18</div>
+<div class="day">19</div>
+<div class="day">20</div>
+<div class="day">21</div>
+
+<div class="day">22</div>
+<div class="day">23</div>
+<div class="day">24</div>
+<div class="day">25</div>
+<div class="day">26</div>
+<div class="day">27</div>
+<div class="day">28</div>
+
+<div class="day">29</div>
+<div class="day">30</div>
+<div class="day">31</div>
+
+</div>
+
+</div>
+
+<div
+id="school"
+class="page">
+
+<h1>School Launcher</h1>
+
+<br>
+
+<div class="widget-grid">
+
+<div class="card">
+
+<h3>Google Classroom</h3>
+
+<p>
+Open your classes and assignments.
+</p>
+
+<br>
+
+<a
+href="https://classroom.google.com"
+target="_blank">
+
+<button class="action">
+
+Launch
+
+</button>
+
+</a>
+
+</div>
+
+<div class="card">
+
+<h3>Canvas</h3>
+
+<p>
+Access your courses.
+</p>
+
+<br>
+
+<a
+href="https://canvas.instructure.com"
+target="_blank">
+
+<button class="action">
+
+Launch
+
+</button>
+
+</a>
+
+</div>
+
+<div class="card">
+
+<h3>Schoology</h3>
+
+<p>
+Open Schoology.
+</p>
+
+<br>
+
+<a
+href="https://schoology.com"
+target="_blank">
+
+<button class="action">
+
+Launch
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="links"
+class="page">
+
+<h1>Quick Links</h1>
+
+<br>
+
+<div class="widget-grid">
+
+<div class="card">
+
+<h3>Khan Academy</h3>
+
+<a
+href="https://www.khanacademy.org"
+target="_blank">
+
+<button class="action">
+
+Open
+
+</button>
+
+</a>
+
+</div>
+
+<div class="card">
+
+<h3>Quizlet</h3>
+
+<a
+href="https://quizlet.com"
+target="_blank">
+
+<button class="action">
+
+Open
+
+</button>
+
+</a>
+
+</div>
+
+<div class="card">
+
+<h3>Desmos</h3>
+
+<a
+href="https://www.desmos.com/calculator"
+target="_blank">
+
+<button class="action">
+
+Open
+
+</button>
+
+</a>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="music"
+class="page">
+
+<h1>Music Center</h1>
+
+<br>
+
+<div class="card">
+
+<h3>Spotify</h3>
+
+<p>
+Future Spotify integration.
+</p>
+
+<br>
+
+<button class="action">
+
+Play
+
+</button>
+
+<button class="action">
+
+Pause
+
+</button>
+
+<button class="action">
+
+Skip
+
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h3>Study Playlist Ideas</h3>
+
+<ul>
+
+<li>Lofi Hip Hop</li>
+
+<li>Piano Focus</li>
+
+<li>Deep Focus</li>
+
+<li>Video Game Soundtracks</li>
+
+<li>Classical Study Music</li>
+
+</ul>
+
+</div>
+
+</div>
+
+<div
+id="ai"
+class="page">
+
+<h1>StudentOS AI</h1>
+
+<br>
+
+<div class="card">
+
+<h3>Ask AI</h3>
+
+<input
+id="aiPrompt"
+placeholder="Ask a question">
+
+<button
+class="action"
+onclick="fakeAI()">
+
+Ask
+
+</button>
+
+<br><br>
+
+<div
+id="aiResponse">
+
+AI response appears here.
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="system"
+class="page">
+
+<h1>System Information</h1>
+
+<br>
+
+<div class="card">
+
+<p>
+
+Browser:
+
+<span
+id="browserInfo">
+
+Loading...
+
+</span>
+
+</p>
+
+<br>
+
+<p>
+
+Screen Width:
+
+<span
+id="screenWidth">
+
+Loading...
+
+</span>
+
+</p>
+
+<br>
+
+<p>
+
+Screen Height:
+
+<span
+id="screenHeight">
+
+Loading...
+
+</span>
+
+</p>
+
+</div>
+
+</div>
+
+<div
+id="settings"
+class="page">
+
+<h1>Settings</h1>
+
+<br>
+
+<div class="card">
+
+<h3>Wallpaper Colors</h3>
+
+<br>
+
+<button
+class="action"
+onclick="themeBlue()">
+
+Blue
+
+</button>
+
+<button
+class="action"
+onclick="themeGreen()">
+
+Green
+
+</button>
+
+<button
+class="action"
+onclick="themePurple()">
+
+Purple
+
+</button>
+
+<button
+class="action"
+onclick="themeDark()">
+
+Dark
+
+</button>
+
+</div>
+
+<br>
+
+<div class="card">
+
+<h3>Search Apps</h3>
+
+<br>
+
+<input
+
+id="appSearch"
+
+placeholder="Search apps..."
+
+onkeyup="searchApps()">
+
+</div>
+
+</div>
+
+</div>
+
+</div>
+
+<div
+id="startMenu"
+class="start-menu">
+
+<h2>
+
+🪟 StudentOS
+
+</h2>
+
+<br>
+
+<button
+class="nav-btn"
+onclick="showPage('dashboard')">
+
+🏠 Dashboard
+
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('notes')">
+
+📝 Notes
+
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('calculator')">
+
+🧮 Calculator
+
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('assignments')">
+
+✅ Assignments
+
+</button>
+
+<button
+class="nav-btn"
+onclick="showPage('school')">
+
+🏫 School Launcher
+
+</button>
+
+</div>
+
+<div class="taskbar">
+
+<button
+onclick="toggleStart()">
+
+🪟 Start
+
+</button>
+
+<button
+onclick="showPage('dashboard')">
+
+Dashboard
+
+</button>
+
+<button
+onclick="showPage('notes')">
+
+Notes
+
+</button>
+
+<button
+onclick="showPage('calculator')">
+
+Calculator
+
+</button>
+
+<button
+onclick="showPage('focus')">
+
+Focus
+
+</button>
+
+<button
+onclick="showPage('school')">
+
+School
+
+</button>
+
+</div>
+
+<script>
+
+/* ===========================
+   PAGE SYSTEM
+=========================== */
+
+function showPage(pageId){
+
+    document
+    .querySelectorAll(".page")
+    .forEach(page=>{
+
+        page.classList.remove(
+        "active"
+        );
+
+    });
+
+    document
+    .getElementById(pageId)
+    .classList.add(
+    "active"
+    );
+
+}
+
+/* ===========================
+   CLOCK
+=========================== */
+
+function updateClock(){
+
+    document
+    .getElementById("clock")
+    .innerHTML =
+
+    new Date()
+    .toLocaleTimeString();
+
+}
+
+setInterval(
+updateClock,
+1000
+);
+
+updateClock();
+
+/* ===========================
+   NOTES
+=========================== */
+
+const notesBox =
+
+document.getElementById(
+"notesBox"
+);
+
+if(notesBox){
+
+notesBox.value =
+
+localStorage.getItem(
+"studentos_notes"
+) || "";
+
+notesBox.addEventListener(
+
+"input",
+
+()=>{
+
+localStorage.setItem(
+
+"studentos_notes",
+
+notesBox.value
+
+);
+
+}
+
+);
+
+}
+
+/* ===========================
+   ASSIGNMENTS
+=========================== */
+
+let assignments =
+JSON.parse(
+
+localStorage.getItem(
+"studentos_assignments"
+)
+
+) || [];
+
+function renderAssignments(){
+
+let list =
+
+document.getElementById(
+"assignmentList"
+);
+
+if(!list) return;
+
+list.innerHTML = "";
+
+assignments.forEach(
+
+(item,index)=>{
+
+let div =
+document.createElement(
+"div"
+);
+
+div.className =
+"assignment";
+
+div.innerHTML =
+
+item +
+
+" <button onclick='removeAssignment("+
+
+index +
+
+")'>Delete</button>";
+
+list.appendChild(div);
+
+}
+
+);
+
+updateAssignmentCounter();
+
+}
+
+function addAssignment(){
+
+let input =
+
+document.getElementById(
+"assignmentInput"
+);
+
+if(
+!input.value.trim()
+) return;
+
+assignments.push(
+input.value
+);
+
+xp += 10;
+
+saveXP();
+
+localStorage.setItem(
+
+"studentos_assignments",
+
+JSON.stringify(
+assignments
+)
+
+);
+
+input.value = "";
+
+renderAssignments();
+
+}
+
+function removeAssignment(index){
+
+assignments.splice(
+index,
+1
+);
+
+localStorage.setItem(
+
+"studentos_assignments",
+
+JSON.stringify(
+assignments
+)
+
+);
+
+renderAssignments();
+
+}
+
+function updateAssignmentCounter(){
+
+let box =
+
+document.getElementById(
+"assignmentCounter"
+);
+
+if(box){
+
+box.innerHTML =
+assignments.length;
+
+}
+
+}
+
+renderAssignments();
+
+/* ===========================
+   TODO LIST
+=========================== */
+
+let todos =
+JSON.parse(
+
+localStorage.getItem(
+"studentos_todos"
+)
+
+) || [];
+
+function renderTodos(){
+
+let list =
+
+document.getElementById(
+"todoList"
+);
+
+if(!list) return;
+
+list.innerHTML = "";
+
+todos.forEach(
+
+(item,index)=>{
+
+let div =
+document.createElement(
+"div"
+);
+
+div.className =
+"assignment";
+
+div.innerHTML =
+
+item +
+
+" <button onclick='removeTodo("+
+
+index +
+
+")'>Delete</button>";
+
+list.appendChild(div);
+
+}
+
+);
+
+}
+
+function addTodo(){
+
+let input =
+
+document.getElementById(
+"todoInput"
+);
+
+if(
+!input.value.trim()
+) return;
+
+todos.push(
+input.value
+);
+
+localStorage.setItem(
+
+"studentos_todos",
+
+JSON.stringify(
+todos
+)
+
+);
+
+input.value = "";
+
+renderTodos();
+
+}
+
+function removeTodo(index){
+
+todos.splice(
+index,
+1
+);
+
+localStorage.setItem(
+
+"studentos_todos",
+
+JSON.stringify(
+todos
+)
+
+);
+
+renderTodos();
+
+}
+
+renderTodos();
+
+/* ===========================
+   CALCULATOR
+=========================== */
+
+function calculate(){
+
+try{
+
+let input =
+
+document.getElementById(
+"calcInput"
+).value;
+
+let result =
+eval(input);
+
+document
+.getElementById(
+"calcResult"
+)
+.innerHTML =
+result;
+
+}catch{
+
+document
+.getElementById(
+"calcResult"
+)
+.innerHTML =
+"Error";
+
+}
+
+}
+
+/* ===========================
+   GPA CALCULATOR
+=========================== */
+
+function calcGPA(){
+
+let grades = [];
+
+for(
+let i = 1;
+i <= 8;
+i++
+){
+
+let box =
+
+document.getElementById(
+"grade"+i
+);
+
+if(box){
+
+let value =
+
+Number(
+box.value
+);
+
+if(!isNaN(value)
+&& value > 0){
+
+grades.push(
+value
+);
+
+}
+
+}
+
+}
+
+if(
+grades.length === 0
+){
+
+return;
+
+}
+
+let total = 0;
+
+grades.forEach(
+
+grade=>{
+
+total += grade;
+
+}
+
+);
+
+let avg =
+total /
+grades.length;
+
+document
+.getElementById(
+"gpaResult"
+)
+.innerHTML =
+
+avg.toFixed(2);
+
+}
+
+/* ===========================
+   FLASHCARDS
+=========================== */
+
+function showAnswer(){
+
+document
+.getElementById(
+"flashAnswer"
+)
+.innerHTML =
+
+"56";
+
+}
+
+/* ===========================
+   XP SYSTEM
+=========================== */
+
+let xp =
+
+Number(
+localStorage.getItem(
+"studentos_xp"
+)
+) || 0;
+
+function saveXP(){
+
+localStorage.setItem(
+"studentos_xp",
+xp
+);
+
+updateXP();
+
+}
+
+function updateXP(){
+
+let box =
+
+document.getElementById(
+"xp"
+);
+
+if(box){
+
+box.innerHTML =
+xp;
+
+}
+
+updateLevel();
+
+}
+
+function updateLevel(){
+
+let level =
+Math.floor(
+xp / 100
+) + 1;
+
+let box =
+
+document.getElementById(
+"level"
+);
+
+if(box){
+
+box.innerHTML =
+level;
+
+}
+
+}
+
+/* ===========================
+   QUOTES
+=========================== */
+
+const quotes = [
+
+"Success is built one day at a time.",
+
+"Keep going.",
+
+"Focus beats motivation.",
+
+"Progress over perfection.",
+
+"Study today. Lead tomorrow.",
+
+"You got this.",
+
+"Small progress is still progress."
+
+];
+
+function loadQuote(){
+
+let quote =
+
+quotes[
+Math.floor(
+Math.random() *
+quotes.length
+)
+];
+
+let box =
+
+document.getElementById(
+"quote"
+);
+
+if(box){
+
+box.innerHTML =
+quote;
+
+}
+
+}
+
+loadQuote();
+
+/* ===========================
+   FOCUS TIMER
+=========================== */
+
+let timerSeconds =
+1500;
+
+let timerInterval;
+
+function updateTimer(){
+
+let minutes =
+
+Math.floor(
+timerSeconds / 60
+);
+
+let seconds =
+
+timerSeconds % 60;
+
+document
+.getElementById(
+"timer"
+)
+.innerHTML =
+
+String(minutes)
+.padStart(2,"0")
+
++
+
+":"
+
++
+
+String(seconds)
+.padStart(2,"0");
+
+}
+
+function startTimer(){
+
+clearInterval(
+timerInterval
+);
+
+timerInterval =
+
+setInterval(()=>{
+
+if(
+timerSeconds <= 0
+){
+
+clearInterval(
+timerInterval
+);
+
+alert(
+"Focus Complete!"
+);
+
+xp += 25;
+
+saveXP();
+
+return;
+
+}
+
+timerSeconds--;
+
+updateTimer();
+
+},1000);
+
+}
+
+function resetTimer(){
+
+clearInterval(
+timerInterval
+);
+
+timerSeconds =
+1500;
+
+updateTimer();
+
+}
+
+updateTimer();
+
+/* ===========================
+   STOPWATCH
+=========================== */
+
+let stopwatch =
+0;
+
+let stopwatchInterval;
+
+function startStopwatch(){
+
+clearInterval(
+stopwatchInterval
+);
+
+stopwatchInterval =
+
+setInterval(()=>{
+
+stopwatch++;
+
+let min =
+
+Math.floor(
+stopwatch / 60
+);
+
+let sec =
+
+stopwatch % 60;
+
+document
+.getElementById(
+"stopwatchDisplay"
+)
+.innerHTML =
+
+String(min)
+.padStart(2,"0")
+
++
+
+":"
+
++
+
+String(sec)
+.padStart(2,"0");
+
+},1000);
+
+}
+
+function resetStopwatch(){
+
+clearInterval(
+stopwatchInterval
+);
+
+stopwatch = 0;
+
+document
+.getElementById(
+"stopwatchDisplay"
+)
+.innerHTML =
+
+"00:00";
+
+}
+
+/* ===========================
+   START MENU
+=========================== */
+
+function toggleStart(){
+
+document
+.getElementById(
+"startMenu"
+)
+.classList
+.toggle(
+"show"
+);
+
+}
+
+/* ===========================
+   SEARCH APPS
+=========================== */
+
+function searchApps(){
+
+let input =
+
+document
+.getElementById(
+"appSearch"
+);
+
+if(!input) return;
+
+let filter =
+
+input.value
+.toLowerCase();
+
+document
+.querySelectorAll(
+".nav-btn"
+)
+.forEach(btn=>{
+
+if(
+btn.innerText
+.toLowerCase()
+.includes(filter)
+){
+
+btn.style.display =
+"block";
+
+}else{
+
+btn.style.display =
+"none";
+
+}
+
+});
+
+}
+
+/* ===========================
+   AI PLACEHOLDER
+=========================== */
+
+function fakeAI(){
+
+const prompt =
+
+document
+.getElementById(
+"aiPrompt"
+)
+.value;
+
+document
+.getElementById(
+"aiResponse"
+)
+.innerHTML =
+
+"StudentOS AI Demo Response:<br><br>" +
+
+"You asked: " +
+
+prompt +
+
+"<br><br>" +
+
+"For full AI features, connect an AI API.";
+
+}
+
+/* ===========================
+   THEMES
+=========================== */
+
+function themeDark(){
+
+document.documentElement
+.style.setProperty(
+"--bg",
+"#0b1220"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel",
+"#111827"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel2",
+"#1e293b"
+);
+
+}
+
+function themeBlue(){
+
+document.documentElement
+.style.setProperty(
+"--bg",
+"#0f172a"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel",
+"#1e40af"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel2",
+"#2563eb"
+);
+
+}
+
+function themeGreen(){
+
+document.documentElement
+.style.setProperty(
+"--bg",
+"#052e16"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel",
+"#166534"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel2",
+"#22c55e"
+);
+
+}
+
+function themePurple(){
+
+document.documentElement
+.style.setProperty(
+"--bg",
+"#2e1065"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel",
+"#6d28d9"
+);
+
+document.documentElement
+.style.setProperty(
+"--panel2",
+"#8b5cf6"
+);
+
+}
+
+/* ===========================
+   SYSTEM INFO
+=========================== */
+
+document
+.getElementById(
+"browserInfo"
+)
+.innerHTML =
+
+navigator.userAgent;
+
+document
+.getElementById(
+"screenWidth"
+)
+.innerHTML =
+
+window.innerWidth;
+
+document
+.getElementById(
+"screenHeight"
+)
+.innerHTML =
+
+window.innerHeight;
+
+/* ===========================
+   STARTUP
+=========================== */
+
+updateXP();
+renderTodos();
+renderAssignments();
+
+</script>
+
+</body>
+</html>
